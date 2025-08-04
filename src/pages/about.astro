@@ -1,7 +1,9 @@
-<body>
-  <a href="/">Blog</a>
-  <a href="/about">About</a>
+---
+import Layout from "@/layouts/Layout.astro";
+const pageTitle = "About";
+---
 
+<Layout pageTitle={pageTitle}>
   <h1>Hi! Welcome to my blog (or the beginning of it)</h1>
   <h2>What you will see here</h2>
   <p>This site will be about my technical ramblings, primarily</p>
@@ -17,4 +19,4 @@
     generation tool this site uses), so let me know about stuff you don't like -
     or better things that you think are great ;)
   </p>
-</body>
+</Layout>
