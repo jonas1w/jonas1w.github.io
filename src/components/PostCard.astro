@@ -1,32 +1,18 @@
 ---
+import type { PostPreview } from '../types/content';
 import { formatDate } from '../utils/date';
-import { optimizeImagePath } from '../utils/optimizeImagePath';
 
 interface Props {
-  post: {
-    id: string;
-    url: string;
-    frontmatter: {
-      title: string;
-      date: string;
-      excerpt: string;
-      image?: string;
-      tags?: string[];
-    };
-  };
+  post: PostPreview;
   showImage?: boolean;
   showExcerpt?: boolean;
   showTags?: boolean;
 }
 
-const { post, showImage = true, showExcerpt = true, showTags = true } = Astro.props;
+const { post, showImage = true, showExcerpt = true, showTags = true }: Props = Astro.props;
 const { title, date, excerpt, image, tags } = post.frontmatter;
-
-// Ensure image path is optimized
-const optimizedImagePath = image ? optimizeImagePath(image) : null;
 ---
-
-<article class="border-t border-gray-200 dark:border-gray-800 py-4 xl:py-8" transition:name={`post-${post.id}`}>
+<article class="border-t border-gray-200 dark:border-gray-800 py-4 xl:py-8">
   <div class="space-y-2">
     <div class="flex flex-col sm:flex-row justify-between items-center gap-2 mb-2">
       <h2 class="text-xl md:text-3xl xl:text-4xl">
@@ -56,14 +42,14 @@ const optimizedImagePath = image ? optimizeImagePath(image) : null;
       </div>
     )}
     
-    {showImage && optimizedImagePath && (
+    {showImage && image && (
       <a 
         href={post.url} 
-        class="block feature-image focus-ring"
+        class="block feature-image focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
         aria-label={`View ${title} article`}
       >
         <img
-          src={optimizedImagePath}
+          src={image}
           alt={`Preview image for ${title}`}
           class="w-full h-full object-cover transition-transform hover:scale-105"
           loading="lazy"
@@ -90,5 +76,3 @@ const optimizedImagePath = image ? optimizeImagePath(image) : null;
     )}
   </div>
 </article>
-
-<!-- Removed inline styles in favor of component classes -->

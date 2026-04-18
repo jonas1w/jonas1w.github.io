@@ -2,14 +2,19 @@
 import BaseLayout from './BaseLayout.astro';
 import PostNavigation from '../components/PostNavigation.astro';
 import { formatDate } from '../utils/date';
-import { optimizeImagePath } from '../utils/optimizeImagePath';
+import type { CollectionEntry } from 'astro:content';
 
-const { frontmatter, headings, prevPost, nextPost } = Astro.props;
+type Post = CollectionEntry<'posts'>;
+
+interface Props {
+  frontmatter: Post['data'];
+  prevPost: { url: string; title: string } | null;
+  nextPost: { url: string; title: string } | null;
+  slug: string;
+}
+
+const { frontmatter, prevPost, nextPost, slug }: Props = Astro.props;
 const { title, date, tags, image, excerpt } = frontmatter;
-const slug = Astro.url.pathname.split('/').filter(Boolean).pop();
-
-// Ensure image path is optimized
-const optimizedImagePath = image ? optimizeImagePath(image) : null;
 
 // Estimated reading time
 const WORDS_PER_MINUTE = 225;
@@ -25,7 +30,7 @@ const publishDate = new Date(date);
 <BaseLayout
   title={title}
   description={excerpt}
-  image={optimizedImagePath || image}
+  image={image}
   type="article"
   publishedDate={publishDate}
 >
@@ -52,10 +57,10 @@ const publishDate = new Date(date);
       )}
     </header>
 
-    {optimizedImagePath && (
+    {image && (
       <div class="max-w-4xl mx-auto mt-2 mb-10 feature-image" transition:name={`image-${slug}`}>
         <img
-          src={optimizedImagePath}
+          src={image}
           alt={`Featured image for "${title}"`}
           class="w-full h-full object-cover"
           loading="eager"

@@ -1,4 +1,5 @@
 ---
+import type { PostEntry, PostNavigationLink } from '../../types/content';
 import { getCollection, render } from 'astro:content';
 import PostLayout from '../../layouts/PostLayout.astro';
 
@@ -34,11 +35,17 @@ export async function getStaticPaths() {
   });
 }
 
+interface Props {
+  entry: PostEntry;
+  prevPost: PostNavigationLink;
+  nextPost: PostNavigationLink;
+}
+
 // Get the post and navigation data for this page
-const { entry, prevPost, nextPost } = Astro.props;
+const { entry, prevPost, nextPost }: Props = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<PostLayout frontmatter={entry.data} prevPost={prevPost} nextPost={nextPost}>
+<PostLayout frontmatter={entry.data} prevPost={prevPost} nextPost={nextPost} slug={entry.id}>
   <Content />
 </PostLayout>

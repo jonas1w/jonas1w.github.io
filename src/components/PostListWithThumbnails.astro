@@ -1,19 +1,20 @@
 ---
+import type { PostPreview } from '../types/content';
 import PostCardWithThumbnail from './PostCardWithThumbnail.astro';
 
 interface Props {
-  posts: any[];
+  posts: PostPreview[];
   showExcerpt?: boolean;
   showTags?: boolean;
   title?: string;
 }
 
-const { 
-  posts, 
-  showExcerpt = true, 
+const {
+  posts,
+  showExcerpt = true,
   showTags = true,
-  title 
-} = Astro.props;
+  title,
+}: Props = Astro.props;
 ---
 
 <section aria-labelledby={title ? 'post-list-title' : undefined}>
@@ -25,7 +26,7 @@ const {
     {posts.length === 0 ? (
       <p class="py-8 text-gray-500 text-center">No posts found.</p>
     ) : (
-      posts.map((post, index) => (
+      posts.map((post) => (
         <PostCardWithThumbnail 
           post={post} 
           showExcerpt={showExcerpt} 

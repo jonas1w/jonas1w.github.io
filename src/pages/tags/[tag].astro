@@ -1,4 +1,5 @@
 ---
+import type { PostEntry, PostPreview } from '../../types/content';
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostList from '../../components/PostList.astro';
@@ -21,16 +22,21 @@ export async function getStaticPaths() {
   });
 }
 
-const { tag } = Astro.params;
-const { posts } = Astro.props;
+const { tag } = Astro.params as { tag: string };
+
+interface Props {
+  posts: PostEntry[];
+}
+
+const { posts }: Props = Astro.props;
 
 // Sort posts by date
-const sortedPosts = posts.sort((a, b) => 
+const sortedPosts = [...posts].sort((a, b) =>
   new Date(b.data.date).valueOf() - new Date(a.data.date).valueOf()
 );
 
 // Format posts for the PostList component
-const formattedPosts = sortedPosts.map(post => ({
+const formattedPosts: PostPreview[] = sortedPosts.map(post => ({
   ...post,
   url: `/posts/${post.id}`,
   frontmatter: post.data
