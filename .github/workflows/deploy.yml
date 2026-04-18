@@ -21,6 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+        # Add this block to explicitly install the latest Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*' # Use '*' for the absolute latest release, or 'lts/*' for the latest stable release
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
